@@ -34,7 +34,7 @@ module.exports.loginuserDBService = async (userDetails) => {
       throw { status: false, msg: "User validation failed" };
     }
 
-    return { status: true, msg: "User Validated Successfully" };
+    return { status: true, msg: "User Validated Successfully", user: user }; // Return the user object
   } catch (error) {
     console.error("Error validating user:", error);
     return { status: false, msg: "Invalid Data" };

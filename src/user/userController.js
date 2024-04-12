@@ -1,4 +1,5 @@
 const userService = require("./userServices"); // Adjust the path as needed
+const jwt = require("jsonwebtoken");
 
 const { Request, Response } = require("express");
 
@@ -20,17 +21,27 @@ const createUserControllerFn = async (req, res) => {
 };
 
 var loginUserControllerFn = async (req, res) => {
-  var result = null;
   try {
-    result = await userService.loginuserDBService(req.body);
+    const result = await userService.loginuserDBService(req.body);
+
+    // Check if login was successful
     if (result.status) {
-      res.send({ status: true, message: result.msg });
+      const user = result.user; // Assuming user data is returned from loginuserDBService
+
+      // Generate JWT token
+      const token = jwt.sign({ userId: user._id }, "MY_PROJECT", {
+        expiresIn: "1h",
+      });
+
+      // Send response with token
+      res.json({ status: true, message: "Login successful", token: token });
     } else {
-      res.send({ status: false, message: result.msg });
+      // Send response with login failure message
+      res.json({ status: false, message: result.msg });
     }
   } catch (error) {
     console.log(error);
-    res.send({ status: false, message: error.msg });
+    res.status(500).json({ status: false, message: "Error logging in" });
   }
 };
 
