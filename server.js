@@ -15,7 +15,9 @@ app.listen(3001, function check(error) {
 });
 
 mongoose
-  .connect("mongodb://localhost:27017/Gym-Application")
+  .connect(
+    "mongodb+srv://12002040701177:vvvv2407@cluster0.ix0fooh.mongodb.net/Gym-application?retryWrites=true&w=majority&appName=Cluster0"
+  )
   .then(() => {
     console.log("Successfully connected to MongoDB");
   })
