@@ -1,6 +1,7 @@
 // paymentController.js
 
 const PaymentService = require("./paymentService");
+const jwt = require("jsonwebtoken");
 
 const { Request, Response } = require("express");
 
@@ -41,5 +42,38 @@ const getPaymentByIdControllerFn = async (req, res) => {
     res.status(500).json({ status: false, message: "Internal Server Error" });
   }
 };
+const updatePaymentStatusControllerFn = async (req, res) => {
+  try {
+    const { paymentId } = req.params;
+    const newStatus = req.body;
 
-module.exports = { createPaymentControllerFn, getPaymentByIdControllerFn };
+    // Create an instance of PaymentService
+    const paymentService = new PaymentService();
+
+    // Call the getPaymentById method from the PaymentService
+    const payment = await paymentService.getPaymentById(paymentId);
+
+    if (!payment) {
+      return res
+        .status(404)
+        .json({ status: false, message: "Payment not found" });
+    }
+
+    // Update payment status
+    const updatedPayment = await paymentService.updatePaymentStatus(
+      paymentId,
+      newStatus
+    );
+
+    // Send success response with updated payment data
+    res.status(200).json({ status: true, payment: updatedPayment });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ status: false, message: "Internal Server Error" });
+  }
+};
+module.exports = {
+  createPaymentControllerFn,
+  getPaymentByIdControllerFn,
+  updatePaymentStatusControllerFn,
+};
