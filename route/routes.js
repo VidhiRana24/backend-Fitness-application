@@ -4,7 +4,7 @@ const userController = require("../src/user/userController");
 const trainerController = require("../src/traineer/traineerController");
 const workoutController = require("../src/workout-plan/workoutController"); // Import workout controller
 const authMiddleware = require("../middleware/authMiddleware");
-const paymentController = require("../src/pqayment]/paymentController");
+const paymentController = require("../src/payment/paymentController");
 
 // User routes
 router.route("/user/login").post(userController.loginUserControllerFn);
@@ -35,11 +35,16 @@ router.delete(
   workoutController.deleteWorkoutById
 );
 
-router.post("/payments", paymentController.createPaymentControllerFn);
+router.post(
+  "/payments",
+  authMiddleware,
+  paymentController.createPaymentControllerFn
+);
 
 // Route to get payment by ID
 router.get(
   "/payments/:paymentId",
+  authMiddleware,
   paymentController.getPaymentByIdControllerFn
 );
 router.patch(

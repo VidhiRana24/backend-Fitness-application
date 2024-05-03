@@ -28,10 +28,14 @@ var loginUserControllerFn = async (req, res) => {
     if (result.status) {
       const user = result.user; // Assuming user data is returned from loginuserDBService
 
-      // Generate JWT token
-      const token = jwt.sign({ userId: user._id }, "MY_PROJECT", {
-        expiresIn: "1h",
-      });
+      // Generate JWT token with user ID and role
+      const token = jwt.sign(
+        { userId: user._id, role: user.role },
+        "MY_PROJECT",
+        {
+          expiresIn: "1h",
+        }
+      );
 
       // Send response with token
       res.json({ status: true, message: "Login successful", token: token });
@@ -44,5 +48,4 @@ var loginUserControllerFn = async (req, res) => {
     res.status(500).json({ status: false, message: "Error logging in" });
   }
 };
-
 module.exports = { createUserControllerFn, loginUserControllerFn };
