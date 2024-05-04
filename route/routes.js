@@ -4,8 +4,8 @@ const userController = require("../src/user/userController");
 const trainerController = require("../src/traineer/traineerController");
 const workoutController = require("../src/workout-plan/workoutController"); // Import workout controller
 const authMiddleware = require("../middleware/authMiddleware");
-const paymentController = require("../src/payment/paymentController");
-
+const paymentController = require("../src/pqayment]/paymentController");
+const profileController = require("../src/profile/profileController");
 // User routes
 router.route("/user/login").post(userController.loginUserControllerFn);
 router.route("/user/create").post(userController.createUserControllerFn);
@@ -51,6 +51,26 @@ router.patch(
   "/payments/:paymentId",
   authMiddleware,
   paymentController.updatePaymentStatusControllerFn
+);
+router.post(
+  "/profile/create",
+  authMiddleware,
+  profileController.createProfileControllerFn
+);
+router.get(
+  "/profile/:userId",
+  authMiddleware,
+  profileController.getProfileByIdControllerFn
+);
+router.patch(
+  "/profile/:userId",
+  authMiddleware,
+  profileController.updateProfileControllerFn
+);
+router.delete(
+  "/profile/:userId",
+  authMiddleware,
+  profileController.deleteProfileControllerFn
 );
 
 // Example of a protected route
