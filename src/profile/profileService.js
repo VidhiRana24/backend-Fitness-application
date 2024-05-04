@@ -16,25 +16,23 @@ class ProfileService {
     }
   }
 
-  async getProfileById(profileId) {
+  async getProfileByUserId(userId) {
     try {
-      // Find the profile by its ID in the database
-      const profile = await Profile.findById(profileId);
+      // Find the profile by user ID in the database
+      const profile = await Profile.findOne({ user: userId });
       return profile;
     } catch (error) {
       // Handle errors
-      throw new Error("Error retrieving profile by ID");
+      throw new Error("Error retrieving profile by user ID");
     }
   }
 
-  async updateProfile(profileId, newData) {
+  async updateProfile(userId, newData) {
+    // Change profileId to userId
     try {
-      // Trim leading and trailing whitespace from the profileId
-      profileId = profileId.trim();
-
-      // Find the profile by its ID and update it with the new data
-      const updatedProfile = await Profile.findByIdAndUpdate(
-        profileId,
+      // Find the profile by user ID and update it with the new data
+      const updatedProfile = await Profile.findOneAndUpdate(
+        { user: userId }, // Update based on user ID
         newData,
         { new: true }
       );
@@ -49,17 +47,14 @@ class ProfileService {
       throw new Error("Error updating profile: " + error.message);
     }
   }
-
-  async deleteProfile(profileId) {
+  async deleteProfile(userId) {
     try {
-      // Trim leading and trailing whitespace from the profileId
-      profileId = profileId.trim();
-
-      // Find the profile by its ID and delete it
-      const deletedProfile = await Profile.findByIdAndDelete(profileId);
+      // Find the profile by user ID and delete it
+      const deletedProfile = await Profile.findOneAndDelete({ user: userId });
 
       if (!deletedProfile) {
-        throw new Error("Profile not found");
+        // If no profile is found, return null
+        return null;
       }
 
       return deletedProfile;

@@ -9,9 +9,9 @@ app.use(
     origin: "http://localhost:4200",
   })
 );
-app.listen(3001, function check(error) {
+app.listen(3002, function check(error) {
   if (error) console.log("Error:", error);
-  else console.log("Server started on port 3001");
+  else console.log("Server started on port 3002");
 });
 
 mongoose

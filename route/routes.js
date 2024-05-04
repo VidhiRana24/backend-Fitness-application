@@ -53,14 +53,14 @@ router.patch(
   paymentController.updatePaymentStatusControllerFn
 );
 router.post(
-  "/profile/create",
+  "/profile/:userId/create",
   authMiddleware,
   profileController.createProfileControllerFn
 );
 router.get(
   "/profile/:userId",
   authMiddleware,
-  profileController.getProfileByIdControllerFn
+  profileController.getProfileByUserIdControllerFn
 );
 router.patch(
   "/profile/:userId",

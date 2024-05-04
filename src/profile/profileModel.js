@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const userProfileSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Reference to the user document
   name: { type: String, required: true },
   surname: { type: String, required: true },
   mobileNumber: { type: String, required: true },
