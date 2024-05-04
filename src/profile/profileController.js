@@ -4,29 +4,49 @@ const verifyToken = require("../../middleware/authMiddleware");
 const { Request, Response } = require("express");
 const createProfileControllerFn = async (req, res) => {
   try {
-    // Verify user token
-    verifyToken(req, res, async () => {
-      // Extract user ID from decoded token
-      const userId = req.userId;
+    // Extract user ID from the token in the request header
+    const userIdFromToken = req.userId;
 
-      if (!userId) {
-        return res
-          .status(401)
-          .json({ status: false, message: "User ID not provided in token" });
-      }
+    // Extract user ID from the request body
+    const {
+      user: userIdFromBody,
+      name,
+      surname,
+      mobileNumber,
+      email,
+      country,
+      state,
+      imageUrl,
+    } = req.body;
 
-      // Call the createProfile method from the ProfileService
-      const profile = await new ProfileService().createProfile({
-        ...req.body,
-        createdBy: userId, // Associate profile with the user
-      });
+    // Check if the user ID from the token matches the user ID from the request body
+    if (userIdFromToken !== userIdFromBody) {
+      return res
+        .status(403)
+        .json({
+          status: false,
+          message:
+            "Unauthorized: You are not allowed to create a profile for another user",
+        });
+    }
 
-      // Send success response
-      res.status(201).json({
-        status: true,
-        message: "Profile created successfully",
-        profile: profile,
-      });
+    // Call the createProfile method from the ProfileService
+    const profile = await new ProfileService().createProfile({
+      user: userIdFromBody,
+      name,
+      surname,
+      mobileNumber,
+      email,
+      country,
+      state,
+      imageUrl,
+    });
+
+    // Send success response
+    res.status(201).json({
+      status: true,
+      message: "Profile created successfully",
+      profile: profile,
     });
   } catch (error) {
     console.error(error);
