@@ -19,6 +19,18 @@ const userProfileSchema = new mongoose.Schema({
     },
   },
 
+  email: {
+    type: String,
+    required: true,
+    unique: true, // Ensures uniqueness of email
+    validate: {
+      validator: function (v) {
+        // Basic email validation
+        return /\S+@\S+\.\S+/.test(v);
+      },
+      message: (props) => `${props.value} is not a valid email address!`,
+    },
+  },
   country: { type: String, required: true },
   state: { type: String, required: true },
   imageUrl: { type: String },

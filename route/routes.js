@@ -6,7 +6,8 @@ const workoutController = require("../src/workout-plan/workoutController"); // I
 const authMiddleware = require("../middleware/authMiddleware");
 const paymentController = require("../src/pqayment]/paymentController");
 const profileController = require("../src/profile/profileController");
-// User routes
+const packageController = require("../src/packages/packageController"); // User routes
+
 router.route("/user/login").post(userController.loginUserControllerFn);
 router.route("/user/create").post(userController.createUserControllerFn);
 
@@ -71,6 +72,26 @@ router.delete(
   "/profile/:userId",
   authMiddleware,
   profileController.deleteProfileControllerFn
+);
+
+router.post(
+  "/packages",
+  authMiddleware,
+  packageController.createPackageControllerFn
+);
+
+// Update a package by ID
+router.patch(
+  "/packages/:id",
+  authMiddleware,
+  packageController.updatePackageStatusControllerFn
+);
+
+// Delete a package by ID
+router.delete(
+  "/packages/:id",
+  authMiddleware,
+  packageController.deletePackageControllerFn
 );
 
 // Example of a protected route

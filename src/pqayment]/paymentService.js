@@ -1,5 +1,3 @@
-// paymentService.js
-
 const Payment = require("./paymentModel");
 
 class PaymentService {
