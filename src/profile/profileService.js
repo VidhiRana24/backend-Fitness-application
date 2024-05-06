@@ -12,7 +12,7 @@ class ProfileService {
       return savedProfile;
     } catch (error) {
       // Handle errors
-      throw new Error("Error creating profile");
+      throw new Error("Error creating profile: " + error.message); // Include the specific error message
     }
   }
 

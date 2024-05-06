@@ -21,13 +21,11 @@ const createProfileControllerFn = async (req, res) => {
 
     // Check if the user ID from the token matches the user ID from the request body
     if (userIdFromToken !== userIdFromBody) {
-      return res
-        .status(403)
-        .json({
-          status: false,
-          message:
-            "Unauthorized: You are not allowed to create a profile for another user",
-        });
+      return res.status(403).json({
+        status: false,
+        message:
+          "Unauthorized: You are not allowed to create a profile for another user",
+      });
     }
 
     // Call the createProfile method from the ProfileService
@@ -49,6 +47,14 @@ const createProfileControllerFn = async (req, res) => {
       profile: profile,
     });
   } catch (error) {
+    // Check if the error is a duplicate key error (E11000)
+    if (error.code === 11000 && error.keyPattern && error.keyPattern.email) {
+      return res.status(400).json({
+        status: false,
+        message: "Email already exists. Please use a different email address.",
+      });
+    }
+
     console.error(error);
     res.status(500).json({ status: false, message: "Internal Server Error" });
   }
